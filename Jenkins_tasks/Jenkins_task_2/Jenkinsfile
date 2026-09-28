@@ -44,7 +44,7 @@ pipeline {
             steps {
                withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
                            sh '''
-                           docker login -u ${DOCKER_USERNAME} -p {DOCKER_PASSWD}
+                           docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWD}
                            docker push a7medsayed/depi-java-app:${BUILD_NUMBER}
                           ''' 
            }
