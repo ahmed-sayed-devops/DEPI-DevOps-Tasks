@@ -12,7 +12,7 @@ pipeline {
                 label 'node1' 
                 }
             steps {
-                dir('Jenkins-tasks/Jenkins-task-2'){
+                dir('Jenkins_tasks/Jenkins_task_2'){
                 sh 'mvn package install -Dskiptests=true'
                 }
             }
@@ -22,7 +22,7 @@ pipeline {
                 label 'node1' 
                 }
             steps {
-                 dir('Jenkins-tasks/Jenkins-task-2'){
+                 dir('Jenkins_tasks/Jenkins_task_2'){
                 sh 'mvn test'
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
                 label 'node1' 
                 }
             steps {
-                dir('Jenkins-tasks/Jenkins-task-2'){
+                dir('Jenkins_tasks/Jenkins_task_2'){
                 sh 'docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .'
                 }
             }
