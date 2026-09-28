@@ -1,0 +1,53 @@
+pipeline {
+    agent none
+    tools {
+        jdk 'JDK11'
+        maven 'maven3-5-4'
+    }
+
+    stages {
+
+        stage('Build Java App') {
+            agent { 
+                label 'node1' 
+                }
+            steps {
+                dir('Jenkins-tasks/Jenkins-task-2'){
+                sh 'mvn package install -Dskiptests=true'
+                }
+            }
+        }
+        stage('Test Java App') {
+            agent { 
+                label 'node1' 
+                }
+            steps {
+                 dir('Jenkins-tasks/Jenkins-task-2'){
+                sh 'mvn test'
+                }
+            }
+        }        
+        stage('Build DockerImage') {
+            agent { 
+                label 'node1' 
+                }
+            steps {
+                dir('Jenkins-tasks/Jenkins-task-2'){
+                sh 'docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .'
+                }
+            }
+        }   
+        stage('push DockerImage to dockerhub') {
+            agent { 
+                label 'node1' 
+                }
+            steps {
+               withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
+                           sh '''
+                           docker login -u ${DOCKER_USERNAME} -p {DOCKER_PASSWD}
+                           docker push a7medsayed/depi-java-app:${BUILD_NUMBER}
+                          ''' 
+           }
+        }           
+    }
+}
