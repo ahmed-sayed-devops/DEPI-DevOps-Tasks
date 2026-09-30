@@ -1,0 +1,63 @@
+Started by user Ahmed Sayed
+Running as SYSTEM
+Building remotely on node1 in workspace /home/jenkins/workspace/First-Freestyle-project
+Installing Eclipse Temurin from /var/lib/jenkins/caches/adoptopenjdk/LINUX/AMD64/jdk-11.0.19+7.zip to /home/jenkins/tools/hudson.model.JDK/JDK11 on node1
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ahmed-sayed-devops/DEPI-DevOps-Tasks.git
+ > git init /home/jenkins/workspace/First-Freestyle-project # timeout=10
+Fetching upstream changes from https://github.com/ahmed-sayed-devops/DEPI-DevOps-Tasks.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/ahmed-sayed-devops/DEPI-DevOps-Tasks.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ahmed-sayed-devops/DEPI-DevOps-Tasks.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 4082cd6ce725d12280089ed73766c6fcfaba1c8d (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 4082cd6ce725d12280089ed73766c6fcfaba1c8d # timeout=10
+Commit message: "add java files"
+ > git rev-list --no-walk 4082cd6ce725d12280089ed73766c6fcfaba1c8d # timeout=10
+[First-Freestyle-project] $ /bin/sh -xe /tmp/jenkins7077419355680114610.sh
++ echo ===== BUILD INFORMATION =====
+===== BUILD INFORMATION =====
++ echo Job Name: First-Freestyle-project
+Job Name: First-Freestyle-project
++ echo Build Number: 5
+Build Number: 5
++ echo Environment: production
+Environment: production
++ echo Workspace: /home/jenkins/workspace/First-Freestyle-project
+Workspace: /home/jenkins/workspace/First-Freestyle-project
++ echo ==============================
+==============================
+[First-Freestyle-project] $ /bin/sh -xe /tmp/jenkins13330526351136731795.sh
++ cd Jenkins_tasks/Jenkins_task_1
++ echo Working inside Jenkins tasks
+Working inside Jenkins tasks
++ ls -la
+total 56
+drwxrwxr-x 5 jenkins jenkins  4096 Sep 23 20:36 .
+drwxrwxr-x 3 jenkins jenkins  4096 Sep 23 20:36 ..
+drwxrwxr-x 3 jenkins jenkins  4096 Sep 23 20:36 .github
+-rw-rw-r-- 1 jenkins jenkins   145 Sep 23 20:36 Dockerfile
+-rw-rw-r-- 1 jenkins jenkins  2194 Sep 23 20:36 README.md
+-rw-rw-r-- 1 jenkins jenkins   710 Sep 23 20:36 azure-pipelines.yml
+-rw-rw-r-- 1 jenkins jenkins 10070 Sep 23 20:36 mvnw
+-rw-rw-r-- 1 jenkins jenkins  6608 Sep 23 20:36 mvnw.cmd
+-rw-rw-r-- 1 jenkins jenkins  2384 Sep 23 20:36 pom.xml
+drwxrwxr-x 2 jenkins jenkins  4096 Sep 23 20:36 screenshots
+drwxrwxr-x 4 jenkins jenkins  4096 Sep 23 20:36 src
+[First-Freestyle-project] $ /bin/sh -xe /tmp/jenkins13754010015821961116.sh
++ echo ===== DOCKER VALIDATION =====
+===== DOCKER VALIDATION =====
++ docker --version
+Docker version 29.8.1, build 4a63305
++ echo Checking Dockerfile...
+Checking Dockerfile...
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+Finished: SUCCESS
