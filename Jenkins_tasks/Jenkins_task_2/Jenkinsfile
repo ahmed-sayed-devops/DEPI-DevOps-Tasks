@@ -17,6 +17,8 @@ pipeline {
                 }
             }
         }
+
+        
         stage('Test Java App') {
             agent { 
                 label 'node1' 
@@ -26,7 +28,9 @@ pipeline {
                 sh 'mvn test'
                 }
             }
-        }        
+        }  
+
+
         stage('Build DockerImage') {
             agent { 
                 label 'node1' 
@@ -36,7 +40,9 @@ pipeline {
                 sh 'docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .'
                 }
             }
-        }   
+        } 
+
+
         stage('push DockerImage to dockerhub') {
             agent { 
                 label 'node1' 
@@ -50,11 +56,14 @@ pipeline {
            }
         }           
     }
+
+
          stage('Deploy Container') {
-          steps {
-            agent { 
+          agent { 
                 label 'node1' 
                 }
+
+          steps {
             dir('Jenkins_tasks/Jenkins_task_2') {
              sh '''
                 CONTAINER_NAME="depi-java-app"
