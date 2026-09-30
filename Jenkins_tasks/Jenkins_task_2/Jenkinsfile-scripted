@@ -1,0 +1,53 @@
+node('node1') {
+
+    stage('Build Java App') {
+        dir('Jenkins_tasks/Jenkins_task_2') {
+            sh 'mvn package install -Dskiptests=true'
+        }
+    }
+
+    stage('Test Java App') {
+        dir('Jenkins_tasks/Jenkins_task_2') {
+            sh 'mvn test'
+        }
+    }
+
+    stage('Build Docker Image') {
+        dir('Jenkins_tasks/Jenkins_task_2') {
+            sh 'docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .'
+        }
+    }
+
+    stage('Push Docker Image to Docker Hub') {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
+                           sh '''
+                           docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWD}
+                           docker push a7medsayed/depi-java-app:${BUILD_NUMBER}
+                          ''' 
+                          
+        }
+    }
+
+    stage('Deploy Container') {
+        dir('Jenkins_tasks/Jenkins_task_2') {
+            sh '''
+                CONTAINER_NAME="depi-java-app"
+                IMAGE_NAME="a7medsayed/depi-java-app:${BUILD_NUMBER}"
+
+                if docker ps -a --format '{{.Names}}' | grep -Fxq "$CONTAINER_NAME"; then
+                    echo "Container $CONTAINER_NAME exists. Removing it..."
+                    docker rm -f "$CONTAINER_NAME"
+                else
+                    echo "Container $CONTAINER_NAME does not exist."
+                fi
+
+                echo "Starting new container..."
+
+                docker run -d \
+                    --name "$CONTAINER_NAME" \
+                    -p 8080:8080 \
+                    "$IMAGE_NAME"
+            '''
+        }
+    }
+}
