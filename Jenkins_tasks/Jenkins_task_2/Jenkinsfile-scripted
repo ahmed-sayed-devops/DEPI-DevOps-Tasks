@@ -1,44 +1,93 @@
+def jdkHome
+def mavenHome
+
 node('node1') {
 
+    // Get tools from Jenkins Global Tool Configuration
+    jdkHome = tool 'JDK11'
+    mavenHome = tool 'maven3-5-4'
+
+    env.JAVA_HOME = jdkHome
+    env.PATH = "${jdkHome}/bin:${mavenHome}/bin:${env.PATH}"
+
     stage('Build Java App') {
+
         dir('Jenkins_tasks/Jenkins_task_2') {
-            sh 'mvn package install -Dskiptests=true'
+
+            sh '''
+                echo "Java version:"
+                java -version
+
+                echo "Maven version:"
+                mvn -version
+
+                mvn clean package -DskipTests
+            '''
         }
     }
 
     stage('Test Java App') {
+
         dir('Jenkins_tasks/Jenkins_task_2') {
-            sh 'mvn test'
+
+            sh '''
+                mvn test
+            '''
         }
     }
 
     stage('Build Docker Image') {
+
         dir('Jenkins_tasks/Jenkins_task_2') {
-            sh 'docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .'
+
+            sh '''
+                docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .
+                    
+            '''
         }
     }
 
     stage('Push Docker Image to Docker Hub') {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
-                           sh '''
-                           docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWD}
-                           docker push a7medsayed/depi-java-app:${BUILD_NUMBER}
-                          ''' 
-                          
+
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-login',
+                usernameVariable: 'DOCKER_USERNAME',
+                passwordVariable: 'DOCKER_PASSWD'
+            )
+        ]) {
+
+            sh '''
+                 docker login -u "$DOCKER_USERNAME" -u "${DOCKER_PASSWD}"
+
+                docker push \
+                    a7medsayed/depi-java-app:${BUILD_NUMBER}
+
+                '''
         }
     }
 
     stage('Deploy Container') {
+
         dir('Jenkins_tasks/Jenkins_task_2') {
+
             sh '''
                 CONTAINER_NAME="depi-java-app"
                 IMAGE_NAME="a7medsayed/depi-java-app:${BUILD_NUMBER}"
 
+                echo "Checking if container exists..."
+
                 if docker ps -a --format '{{.Names}}' | grep -Fxq "$CONTAINER_NAME"; then
-                    echo "Container $CONTAINER_NAME exists. Removing it..."
+
+                    echo "Container $CONTAINER_NAME exists."
+                    echo "Removing old container..."
+
                     docker rm -f "$CONTAINER_NAME"
+
                 else
+
                     echo "Container $CONTAINER_NAME does not exist."
+
                 fi
 
                 echo "Starting new container..."
@@ -47,6 +96,10 @@ node('node1') {
                     --name "$CONTAINER_NAME" \
                     -p 8080:8080 \
                     "$IMAGE_NAME"
+
+                echo "Container deployed successfully."
+
+                docker ps
             '''
         }
     }
