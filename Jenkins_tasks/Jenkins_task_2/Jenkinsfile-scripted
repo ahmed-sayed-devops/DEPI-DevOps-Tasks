@@ -58,7 +58,7 @@ node('node1') {
         ]) {
 
             sh '''
-                 docker login -u "$DOCKER_USERNAME" -u "${DOCKER_PASSWD}"
+                 docker login -u "$DOCKER_USERNAME" -p "${DOCKER_PASSWD}"
 
                 docker push \
                     a7medsayed/depi-java-app:${BUILD_NUMBER}
