@@ -50,5 +50,32 @@ pipeline {
            }
         }           
     }
+         stage('Deploy Container') {
+          steps {
+            agent { 
+                label 'node1' 
+                }
+            dir('Jenkins_tasks/Jenkins_task_2') {
+             sh '''
+                CONTAINER_NAME="depi-java-app"
+                IMAGE_NAME="a7medsayed/depi-java-app:${BUILD_NUMBER}"
+
+                if docker ps -a --format '{{.Names}}' | grep -Fxq "$CONTAINER_NAME"; then
+                    echo "Container $CONTAINER_NAME exists. Removing it..."
+                    docker rm -f "$CONTAINER_NAME"
+                else
+                    echo "Container $CONTAINER_NAME does not exist."
+                fi
+
+                echo "Starting new container..."
+
+                docker run -d \
+                    --name "$CONTAINER_NAME" \
+                    -p 8080:8080 \
+                    "$IMAGE_NAME"
+              '''
+           }
+        }
+      }
     }
 }
