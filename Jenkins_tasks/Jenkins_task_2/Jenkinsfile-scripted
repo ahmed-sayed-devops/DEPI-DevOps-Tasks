@@ -60,8 +60,7 @@ node('node1') {
             sh '''
                  docker login -u "$DOCKER_USERNAME" -p "${DOCKER_PASSWD}"
 
-                docker push \
-                    a7medsayed/depi-java-app:${BUILD_NUMBER}
+                docker push a7medsayed/depi-java-app:${BUILD_NUMBER}
 
                 '''
         }
@@ -92,10 +91,7 @@ node('node1') {
 
                 echo "Starting new container..."
 
-                docker run -d \
-                    --name "$CONTAINER_NAME" \
-                    -p 8080:8080 \
-                    "$IMAGE_NAME"
+                docker run -d --name "$CONTAINER_NAME" -p 8090:8090 "$IMAGE_NAME"
 
                 echo "Container deployed successfully."
 
