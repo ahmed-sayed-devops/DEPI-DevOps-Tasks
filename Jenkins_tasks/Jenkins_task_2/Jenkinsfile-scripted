@@ -1,11 +1,8 @@
-def jdkHome
-def mavenHome
-
 node('node1') {
 
-    // Get tools from Jenkins Global Tool Configuration
-    jdkHome = tool 'JDK11'
-    mavenHome = tool 'maven3-5-4'
+    
+    def jdkHome = tool 'JDK11'
+    def mavenHome = tool 'maven3-5-4'
 
     env.JAVA_HOME = jdkHome
     env.PATH = "${jdkHome}/bin:${mavenHome}/bin:${env.PATH}"
