@@ -7,6 +7,10 @@ node('node1') {
     env.JAVA_HOME = jdkHome
     env.PATH = "${jdkHome}/bin:${mavenHome}/bin:${env.PATH}"
 
+    stage('Checkout the code'){
+        git branch: 'main', url: 'https://github.com/ahmed-sayed-devops/DEPI-DevOps-Tasks.git'
+    }
+
     stage('Build Java App') {
 
         dir('Jenkins_tasks/Jenkins_task_2') {

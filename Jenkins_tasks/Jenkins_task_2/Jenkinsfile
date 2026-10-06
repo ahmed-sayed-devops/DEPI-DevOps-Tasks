@@ -1,3 +1,5 @@
+@Library('depi-sharedlib') _
+
 pipeline {
     agent none
     tools {
@@ -13,7 +15,10 @@ pipeline {
                 }
             steps {
                 dir('Jenkins_tasks/Jenkins_task_2'){
-                sh 'mvn package install -Dskiptests=true'
+
+                def mvn = new edu.depi.maven()
+                mvn.mavenCommand("package install -Dskiptests=true")
+
                 }
             }
         }
@@ -25,7 +30,9 @@ pipeline {
                 }
             steps {
                  dir('Jenkins_tasks/Jenkins_task_2'){
-                sh 'mvn test'
+
+                mavenCommand("test")
+
                 }
             }
         }  
@@ -37,7 +44,9 @@ pipeline {
                 }
             steps {
                 dir('Jenkins_tasks/Jenkins_task_2'){
-                sh 'docker build -t a7medsayed/depi-java-app:${BUILD_NUMBER} .'
+                
+                dockerBuild('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
+
                 }
             }
         } 
@@ -50,8 +59,9 @@ pipeline {
             steps {
                withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
                            sh '''
-                           docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWD}
-                           docker push a7medsayed/depi-java-app:${BUILD_NUMBER}
+                           dockerLogin('${DOCKER_USERNAME}', '${DOCKER_PASSWD})
+                           
+                           dockerPush('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
                           ''' 
            }
         }           
