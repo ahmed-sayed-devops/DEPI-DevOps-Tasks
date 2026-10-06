@@ -34,7 +34,8 @@ pipeline {
                 script{
                  dir('Jenkins_tasks/Jenkins_task_2'){
 
-                mavenCommand("test")
+                 def mvn = new edu.depi.maven()
+                   mvn.mavenCommand("test")
 
                    }
                 }
@@ -50,8 +51,9 @@ pipeline {
                 script{
 
                 dir('Jenkins_tasks/Jenkins_task_2'){
-                
-                dockerBuild('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
+
+                  def docker = new edu.depi.docker()   
+                docker.dockerBuild('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
 
                    }
                 }
@@ -66,11 +68,10 @@ pipeline {
             steps {
                 script{
                withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
-                           sh '''
-                           dockerLogin('${DOCKER_USERNAME}', '${DOCKER_PASSWD})
+                           def docker = new edu.depi.docker()   
+                           docker.dockerLogin('${DOCKER_USERNAME}', '${DOCKER_PASSWD}')
 
-                           dockerPush('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
-                          ''' 
+                           docker.dockerPush('a7medsayed/depi-java-app', '${BUILD_NUMBER}') 
                           
                 }
             }
