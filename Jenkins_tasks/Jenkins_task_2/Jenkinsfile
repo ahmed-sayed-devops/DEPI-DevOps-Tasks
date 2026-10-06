@@ -14,13 +14,15 @@ pipeline {
                 label 'node1' 
                 }
             steps {
-
+                script{
                  dir('Jenkins_tasks/Jenkins_task_2'){
 
-                   mavenCommand("package install -Dskiptests=true")
+                   def mvn = new edu.depi.maven()
+                   mvn.mavenCommand("package install -Dskiptests=true")
 
-                    }
                 }
+                }
+            }
         }
 
         
