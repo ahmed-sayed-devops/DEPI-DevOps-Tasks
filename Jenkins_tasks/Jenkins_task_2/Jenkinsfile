@@ -31,10 +31,12 @@ pipeline {
                 label 'node1' 
                 }
             steps {
+                script{
                  dir('Jenkins_tasks/Jenkins_task_2'){
 
                 mavenCommand("test")
 
+                   }
                 }
             }
         }  
@@ -45,10 +47,13 @@ pipeline {
                 label 'node1' 
                 }
             steps {
+                script{
+
                 dir('Jenkins_tasks/Jenkins_task_2'){
                 
                 dockerBuild('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
 
+                   }
                 }
             }
         } 
@@ -59,13 +64,16 @@ pipeline {
                 label 'node1' 
                 }
             steps {
+                script{
                withCredentials([usernamePassword(credentialsId: 'dockerhub-login', passwordVariable: 'DOCKER_PASSWD', usernameVariable: 'DOCKER_USERNAME')]) {
                            sh '''
                            dockerLogin('${DOCKER_USERNAME}', '${DOCKER_PASSWD})
 
                            dockerPush('a7medsayed/depi-java-app', '${BUILD_NUMBER}')
                           ''' 
-           }
+                          
+                }
+            }
         }           
     }
 
