@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: java-app
+  namespace: argocd
+
+spec:
+  project: java-app
+
+  source:
+    repoURL: https://github.com/ahmed-sayed-devops/DEPI-DevOps-Tasks.git
+    targetRevision: HEAD
+    path: ArgoCD_tasks/ArgoCD_task_1/K8S
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ahmed
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
