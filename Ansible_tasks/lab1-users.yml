@@ -1,0 +1,76 @@
+---
+- name: Create Users and Setup SSH Access
+  hosts: all
+  become: true
+
+  vars:
+    user_list:
+      - john
+      - sarah
+      - mike
+
+    ssh_keys:
+      john: "ssh-rsa AAA123 john@work"
+      sarah: "ssh-rsa AAA456 sarah@work"
+      mike: "ssh-rsa AAA789 mike@work"
+
+  tasks:
+
+# Create users
+
+    - name: Create users
+      user:
+        name: "{{item}}"
+        state: present
+        shell: /bin/bash
+      loop: "{{ user_list }}"
+      register: user_result
+
+#- name: Show user result
+#debug:
+#var: user_result
+
+
+
+# Create .ssh directories
+
+    - name: Create .ssh directories
+      file:
+        path: "/home/{{ item }}/.ssh"
+        state: directory
+        owner: "{{ item }}"
+        mode: '0700'
+      loop: "{{ user_list }}"
+      when: user_result.msg == "All items completed"
+
+# Add SSH keys
+
+    - name: Add SSH keys
+      copy:
+        content: "{{ ssh_keys[item] }}"
+        dest: "/home/{{ item }}/.ssh/authorized_keys"
+        owner: "{{ item }}"
+        mode: '0600'
+      loop: "{{ user_list }}"
+      notify: Restart SSH
+
+# Verify users can login
+#
+    - name: Verify users exist
+      shell:
+        cmd: "id {{ item }}"
+      loop: "{{ user_list }}"
+      register: login_result
+      changed_when: false
+
+# Show results
+
+    - name: Show verification results
+      debug:
+        var: login_result.results
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted

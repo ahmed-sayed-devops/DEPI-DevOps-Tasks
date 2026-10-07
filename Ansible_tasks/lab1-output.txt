@@ -1,0 +1,250 @@
+[ansible@AnsibleControlNode depi]$ ansible-playbook lab1-users.yml  --syntax-check
+
+playbook: lab1-users.yml
+[ansible@AnsibleControlNode depi]$ ansible-playbook lab1-users.yml
+
+PLAY [Create Users and Setup SSH Access] **************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************
+ok: [worker1]
+ok: [worker2]
+
+TASK [Create users] ***********************************************************************************************************************
+ok: [worker2] => (item=john)
+ok: [worker1] => (item=john)
+ok: [worker2] => (item=sarah)
+ok: [worker1] => (item=sarah)
+ok: [worker1] => (item=mike)
+ok: [worker2] => (item=mike)
+
+TASK [Create .ssh directories] ************************************************************************************************************
+ok: [worker2] => (item=john)
+ok: [worker1] => (item=john)
+ok: [worker2] => (item=sarah)
+ok: [worker1] => (item=sarah)
+ok: [worker1] => (item=mike)
+ok: [worker2] => (item=mike)
+
+TASK [Add SSH keys] ***********************************************************************************************************************
+ok: [worker2] => (item=john)
+ok: [worker1] => (item=john)
+ok: [worker2] => (item=sarah)
+ok: [worker1] => (item=sarah)
+ok: [worker2] => (item=mike)
+ok: [worker1] => (item=mike)
+
+TASK [Verify users exist] *****************************************************************************************************************
+ok: [worker1] => (item=john)
+ok: [worker2] => (item=john)
+ok: [worker2] => (item=sarah)
+ok: [worker1] => (item=sarah)
+ok: [worker1] => (item=mike)
+ok: [worker2] => (item=mike)
+
+TASK [Show verification results] **********************************************************************************************************
+ok: [worker1] => {
+    "login_result.results": [
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "cmd": "id john",
+            "delta": "0:00:00.008086",
+            "end": "2026-08-12 01:08:33.836675",
+            "failed": false,
+            "invocation": {
+                "module_args": {
+                    "_raw_params": "id john",
+                    "_uses_shell": true,
+                    "argv": null,
+                    "chdir": null,
+                    "creates": null,
+                    "executable": null,
+                    "removes": null,
+                    "stdin": null,
+                    "stdin_add_newline": true,
+                    "strip_empty_ends": true
+                }
+            },
+            "item": "john",
+            "msg": "",
+            "rc": 0,
+            "start": "2026-08-12 01:08:33.828589",
+            "stderr": "",
+            "stderr_lines": [],
+            "stdout": "uid=3002(john) gid=3002(john) groups=3002(john)",
+            "stdout_lines": [
+                "uid=3002(john) gid=3002(john) groups=3002(john)"
+            ]
+        },
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "cmd": "id sarah",
+            "delta": "0:00:00.008497",
+            "end": "2026-08-12 01:08:34.468081",
+            "failed": false,
+            "invocation": {
+                "module_args": {
+                    "_raw_params": "id sarah",
+                    "_uses_shell": true,
+                    "argv": null,
+                    "chdir": null,
+                    "creates": null,
+                    "executable": null,
+                    "removes": null,
+                    "stdin": null,
+                    "stdin_add_newline": true,
+                    "strip_empty_ends": true
+                }
+            },
+            "item": "sarah",
+            "msg": "",
+            "rc": 0,
+            "start": "2026-08-12 01:08:34.459584",
+            "stderr": "",
+            "stderr_lines": [],
+            "stdout": "uid=3003(sarah) gid=3003(sarah) groups=3003(sarah)",
+            "stdout_lines": [
+                "uid=3003(sarah) gid=3003(sarah) groups=3003(sarah)"
+            ]
+        },
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "cmd": "id mike",
+            "delta": "0:00:00.009758",
+            "end": "2026-08-12 01:08:35.093033",
+            "failed": false,
+            "invocation": {
+                "module_args": {
+                    "_raw_params": "id mike",
+                    "_uses_shell": true,
+                    "argv": null,
+                    "chdir": null,
+                    "creates": null,
+                    "executable": null,
+                    "removes": null,
+                    "stdin": null,
+                    "stdin_add_newline": true,
+                    "strip_empty_ends": true
+                }
+            },
+            "item": "mike",
+            "msg": "",
+            "rc": 0,
+            "start": "2026-08-12 01:08:35.083275",
+            "stderr": "",
+            "stderr_lines": [],
+            "stdout": "uid=3004(mike) gid=3004(mike) groups=3004(mike)",
+            "stdout_lines": [
+                "uid=3004(mike) gid=3004(mike) groups=3004(mike)"
+            ]
+        }
+    ]
+}
+ok: [worker2] => {
+    "login_result.results": [
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "cmd": "id john",
+            "delta": "0:00:00.008372",
+            "end": "2026-08-12 01:08:33.654988",
+            "failed": false,
+            "invocation": {
+                "module_args": {
+                    "_raw_params": "id john",
+                    "_uses_shell": true,
+                    "argv": null,
+                    "chdir": null,
+                    "creates": null,
+                    "executable": null,
+                    "removes": null,
+                    "stdin": null,
+                    "stdin_add_newline": true,
+                    "strip_empty_ends": true
+                }
+            },
+            "item": "john",
+            "msg": "",
+            "rc": 0,
+            "start": "2026-08-12 01:08:33.646616",
+            "stderr": "",
+            "stderr_lines": [],
+            "stdout": "uid=5007(john) gid=5007(john) groups=5007(john)",
+            "stdout_lines": [
+                "uid=5007(john) gid=5007(john) groups=5007(john)"
+            ]
+        },
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "cmd": "id sarah",
+            "delta": "0:00:00.008861",
+            "end": "2026-08-12 01:08:34.275552",
+            "failed": false,
+            "invocation": {
+                "module_args": {
+                    "_raw_params": "id sarah",
+                    "_uses_shell": true,
+                    "argv": null,
+                    "chdir": null,
+                    "creates": null,
+                    "executable": null,
+                    "removes": null,
+                    "stdin": null,
+                    "stdin_add_newline": true,
+                    "strip_empty_ends": true
+                }
+            },
+            "item": "sarah",
+            "msg": "",
+            "rc": 0,
+            "start": "2026-08-12 01:08:34.266691",
+            "stderr": "",
+            "stderr_lines": [],
+            "stdout": "uid=5008(sarah) gid=5008(sarah) groups=5008(sarah)",
+            "stdout_lines": [
+                "uid=5008(sarah) gid=5008(sarah) groups=5008(sarah)"
+            ]
+        },
+        {
+            "ansible_loop_var": "item",
+            "changed": false,
+            "cmd": "id mike",
+            "delta": "0:00:00.008677",
+            "end": "2026-08-12 01:08:34.910854",
+            "failed": false,
+            "invocation": {
+                "module_args": {
+                    "_raw_params": "id mike",
+                    "_uses_shell": true,
+                    "argv": null,
+                    "chdir": null,
+                    "creates": null,
+                    "executable": null,
+                    "removes": null,
+                    "stdin": null,
+                    "stdin_add_newline": true,
+                    "strip_empty_ends": true
+                }
+            },
+            "item": "mike",
+            "msg": "",
+            "rc": 0,
+            "start": "2026-08-12 01:08:34.902177",
+            "stderr": "",
+            "stderr_lines": [],
+            "stdout": "uid=5009(mike) gid=5009(mike) groups=5009(mike)",
+            "stdout_lines": [
+                "uid=5009(mike) gid=5009(mike) groups=5009(mike)"
+            ]
+        }
+    ]
+}
+
+PLAY RECAP ********************************************************************************************************************************
+worker1                    : ok=6    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+worker2                    : ok=6    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[ansible@AnsibleControlNode depi]$

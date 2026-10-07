@@ -1,0 +1,5 @@
+[production]
+worker1
+[DR]
+worker2
+

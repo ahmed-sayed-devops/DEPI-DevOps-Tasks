@@ -1,0 +1,80 @@
+---
+- name: File Management and Permissions
+  hosts: all
+  vars:
+    project_dirs:
+      - "/projects/{{ ansible_hostname }}"
+      - "/projects/{{ ansible_hostname }}/config"
+      - "/projects/{{ ansible_hostname }}/logs"
+
+    backup_files:
+      - "/etc/hosts"
+      - "/etc/resolv.conf"
+
+  tasks:
+
+# Create project directories
+
+    - name: Create project directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ project_dirs }}"
+
+
+# Create server info file
+
+    - name: Create server info file
+      copy:
+        content: |
+          Server Information
+          ==================
+          Hostname: {{ ansible_hostname }}
+          Distribution: {{ ansible_facts.distribution }}
+          Memory MB: {{ ansible_facts['memtotal_mb'] }}
+          CPU Cores: {{ ansible_processor_cores }}
+        dest: "/projects/{{ ansible_hostname }}/server_info.txt"
+        mode: '0644'
+
+    
+# Create configuration from template
+    - name: Create app configuration
+      template:
+        src: app_config.j2
+        dest: "/projects/{{ ansible_hostname }}/config/app.conf"
+
+
+# Set ownership
+
+    - name: Set project ownership
+      file:
+        path: "/projects/{{ ansible_hostname }}"
+        owner: root
+        group: root
+        recurse: yes
+      changed_when: false
+
+
+# Create backup directory
+
+    - name: Create backup directory
+      file:
+        path: /backup
+        state: directory
+        mode: '0755'    
+
+# Backup existing files
+    - name: Backup files
+      copy:
+        remote_src: yes
+        src: "{{ item }}"
+        dest: "/backup/"
+      loop: "{{ backup_files }}"
+      register: backup_result
+
+# Show what was backed up
+    - name: Show backup results
+      debug:
+        msg: "{{ backup_result.results | map(attribute='changed') | list }}"
+      when: backup_result.changed

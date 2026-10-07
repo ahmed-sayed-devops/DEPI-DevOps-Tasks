@@ -1,0 +1,67 @@
+[ansible@AnsibleControlNode depi]$
+[ansible@AnsibleControlNode depi]$ ls
+ansible.cfg  app_config.j2  depi-inventory  lab1-users.yml  lab3-files.yml  playbook-user.yml
+[ansible@AnsibleControlNode depi]$
+[ansible@AnsibleControlNode depi]$
+[ansible@AnsibleControlNode depi]$ vim ansible.cfg
+[ansible@AnsibleControlNode depi]$
+[ansible@AnsibleControlNode depi]$ ansible-playbook lab3-files.yml --syntax-check
+
+playbook: lab3-files.yml
+[ansible@AnsibleControlNode depi]$ ansible-playbook lab3-files.yml
+
+PLAY [File Management and Permissions] ****************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************
+ok: [worker1]
+ok: [worker2]
+
+TASK [Create project directories] *********************************************************************************************************
+changed: [worker2] => (item=/projects/Ansible-WorkerNode2)
+changed: [worker1] => (item=/projects/Ansible-workerNode1)
+changed: [worker2] => (item=/projects/Ansible-WorkerNode2/config)
+changed: [worker1] => (item=/projects/Ansible-workerNode1/config)
+changed: [worker2] => (item=/projects/Ansible-WorkerNode2/logs)
+changed: [worker1] => (item=/projects/Ansible-workerNode1/logs)
+
+TASK [Create server info file] ************************************************************************************************************
+changed: [worker2]
+changed: [worker1]
+
+TASK [Create app configuration] ***********************************************************************************************************
+changed: [worker1]
+changed: [worker2]
+
+TASK [Set project ownership] **************************************************************************************************************
+ok: [worker1]
+ok: [worker2]
+
+TASK [Create backup directory] ************************************************************************************************************
+changed: [worker2]
+changed: [worker1]
+
+TASK [Backup files] ***********************************************************************************************************************
+changed: [worker2] => (item=/etc/hosts)
+changed: [worker1] => (item=/etc/hosts)
+changed: [worker2] => (item=/etc/resolv.conf)
+changed: [worker1] => (item=/etc/resolv.conf)
+
+TASK [Show backup results] ****************************************************************************************************************
+ok: [worker1] => {
+    "msg": [
+        true,
+        true
+    ]
+}
+ok: [worker2] => {
+    "msg": [
+        true,
+        true
+    ]
+}
+
+PLAY RECAP ********************************************************************************************************************************
+worker1                    : ok=8    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+worker2                    : ok=8    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[ansible@AnsibleControlNode depi]$
