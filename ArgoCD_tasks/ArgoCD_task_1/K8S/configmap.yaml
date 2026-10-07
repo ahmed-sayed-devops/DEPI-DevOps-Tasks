@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: java-app-config
+  namespace: ahmed
+data:
+  APP_NAME: "Java Application"
+  ENVIRONMENT: "production"
